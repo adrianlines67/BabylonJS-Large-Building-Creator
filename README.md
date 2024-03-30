@@ -8,4 +8,5 @@ The script creates a 3D Building which can be dynamically changed.
 
 'F' Stops the edit mode.
 
-In edit mode, the arrow keys navigate around the building with < and > changing the current building cell. \n
+In edit mode, the arrow keys navigate around the building with < and > changing the current building cell.
+
