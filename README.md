@@ -1,5 +1,6 @@
 Babylon JS Large Building Designer by Adrian Lines
-Main script is dynamic.php
+
+The Main script is dynamic.php
 
 The script creates a 3D Building which can be dynamically changed
 'E' starts the edit mode. 
