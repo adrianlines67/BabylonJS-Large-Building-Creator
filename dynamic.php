@@ -27,14 +27,14 @@
         </script>
         
         <script src="https://cdn.babylonjs.com/babylon.js"></script>
-        <script src="https://cdn.babylonjs.com/materialsLibrary/babylonjs.materials.min.js"></script>
-        <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
-        <script src="https://cdn.babylonjs.com/postProcessesLibrary/babylonjs.postProcess.min.js"></script>
-        <script src="https://cdn.babylonjs.com/proceduralTexturesLibrary/babylonjs.proceduralTextures.min.js"></script>
-        <script src="https://cdn.babylonjs.com/serializers/babylonjs.serializers.min.js"></script>
-        <script src="https://cdn.babylonjs.com/gui/babylon.gui.min.js"></script>
-        <script src="https://cdn.babylonjs.com/inspector/babylon.inspector.bundle.js"></script>
-        <script src="https://cdn.babylonjs.com/viewer/babylon.viewer.js"></script>
+<!--        <script src="https://cdn.babylonjs.com/materialsLibrary/babylonjs.materials.min.js"></script>-->
+<!--        <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>-->
+<!--        <script src="https://cdn.babylonjs.com/postProcessesLibrary/babylonjs.postProcess.min.js"></script>-->
+<!--        <script src="https://cdn.babylonjs.com/proceduralTexturesLibrary/babylonjs.proceduralTextures.min.js"></script>-->
+<!--        <script src="https://cdn.babylonjs.com/serializers/babylonjs.serializers.min.js"></script>-->
+<!--        <script src="https://cdn.babylonjs.com/gui/babylon.gui.min.js"></script>-->
+<!--        <script src="https://cdn.babylonjs.com/inspector/babylon.inspector.bundle.js"></script>-->
+<!--        <script src="https://cdn.babylonjs.com/viewer/babylon.viewer.js"></script>-->
 
         <style>
             html, body {
@@ -78,19 +78,44 @@
                 font-weight:bold;
             }  
             
+            .energy{
+                position:absolute;
+                bottom:1vh;
+                left:1vw; 
+                opacity:0.5;
+                border-radius:10px;
+                background-color:black;
+                color:orange;
+                font-size:1.5em;
+                padding:0.5vw;
+                opacity:0.5;
+                font-family:arial;
+                font-weight:bold;
+                width:40vw;
+                text-align:left;
+            }  
+            
+            .energybar {
+                width:100%;
+                height:5vh;
+                background-color:green;
+            }
+            
             .start {
                 position:absolute;
                 top:0;
                 left:0;
                 width:100%;
                 height:100%;
-                padding-top:30vh;
-                font-size:4vw;
+                padding-top:15vh;
+                font-size:2.5vw;
                 text-align:center;
-                background-color:mintcream;
+                background-color:aliceblue;
                 color:silver;
                 font-weight:bold;
                 cursor:pointer;
+                opacity:1;
+
             }            
             
             .loading {
@@ -99,12 +124,47 @@
                 left:0;
                 width:100%;
                 height:100%;
-                padding-top:5vh;
-                font-size:4vw;
+                padding-top:15vh;
+                font-size:2.5vw;
                 text-align:center;
                 background-color:white;
                 color:silver;
                 font-weight:bold;
+                opacity:1;
+            }
+            
+            
+            .title {
+                position:absolute;
+                top:0;
+                left:0;
+                width:100%;
+                height:100%;
+                padding-top:15vh;
+                font-size:2.5vw;
+                text-align:center;
+                background-color:white;
+                color:grey;
+                font-weight:bold;
+                cursor:pointer;
+                opacity:1;
+            }   
+            
+            .gameOver {
+                position:absolute;
+                top:0;
+                left:0;
+                width:100%;
+                height:100%;
+                padding-top:33vh;
+                font-size:8vw;
+                text-align:center;
+                background-color:indianred;
+                color:white;
+                font-weight:bold;
+                cursor:pointer;
+                opacity:0.9; 
+                display:none;
             }
 
             a {text-decoration:none; color:white;}
@@ -218,10 +278,8 @@
                         $cell = mysqli_fetch_assoc($cells);
                         $map[$y].="'".$cell["celltype"]."', ";
                     }
-                    $x++;  
-                    
-                }
-                
+                    $x++;                     
+                }                
                 $map[$y].="],".$e;
                 $z++;
             }          
@@ -240,13 +298,41 @@
         <canvas id="renderCanvas"></canvas>
         <div id="cell"></div>
         <div class="fps"><span id="frames">0</span></div>
-        <div class="start"><div id="startup">Click to Start</div></div>
-        <div class="loading">
-            <div><img src="textures/loading.gif" style="max-width:60vw;max-height:60vh;"></div>
-            <div>Loading 3D Assets</div>
+        <div class="energy">
+            <div class="energybar"></div>
         </div>
+        <div class="gameOver">
+            <div class="gameOverMessage"></div>
+                
+        </div>
+        <div class="start">
+            <div>Dynamic Worlds V0.0 (alpha testing)</div>
+            <hr>
+            <div><img src="textures/build.jpg" style="max-width:60vw;max-height:60vh;opacity:0.3;"></div>
+
+            <div id="startup" style="color:orange;padding-top:5vh;">Click to Enter World</div>                
+        </div>
+        <div class="loading">
+            <div>Dynamic Worlds V0.0 (alpha testing)</div>
+            <hr>
+            <div><img src="textures/loading.gif" style="max-width:60vw;max-height:50vh;"></div>
+            <div>Rendering 3D Assets</div>
+        </div>
+        <div class="title">
+            <div>Dynamic Worlds V0.0 (alpha testing)</div>
+            <hr>
+            <div style="font-size:2vw;">This application uses the 3D Engine BabylonJS.</div>
+            <div style="font-size:2vw;">The world has to be rendered before you can play.</div>
+
+            <div style="padding-top:5vh;color:indianred;">Click on the screen to start rendering.</div>
+
+            <div style="padding-top:5vh;color:lightsalmon;opacity:0.6;">DataScribe Limited</div>
+            <div style="color:lightblue;opacity:0.6;">Creative Software Design</div>
+        </div>
+
         <script>
 
+            console.log("Start Scripts");
             // Global Functions  
             // Create 1 Dimensional Array
             function Create1DArray(rows) {
@@ -298,6 +384,8 @@
             function getRndInt(max) {
                 return Math.floor(Math.random() * max);
             }
+            
+            console.log("Set Variables");
             
             var building = "<?=$building;?>";
             var dbmap = "<?=$dbmap;?>";
@@ -517,12 +605,11 @@
             var barrierwidth = zs*0.99;
             var barrierheight = wallheight/3.1;
             
-            var iheight = 2.5;
-            
+            var iheight = 2.2
             var sunX = 0;
             var sunZ = 0;
             var sunY = 15;
-            var sunD = 2; // Diameter
+            var sunD = 4; // Diameter
             
             // Edit Cell Start Point
             var cellPosX = 2
@@ -572,7 +659,9 @@
             rotatez[1] = -1;
             rotatez[2] = 0;
             rotatez[3] = -1;
-            rotatez[4] = 0;             
+            rotatez[4] = 0;   
+            
+            console.log("Create 3D Arrays");
             
             //  Create3DArray(x,z,y)
             var cell        = Create3DArray(gridsizeX+1, gridsizeZ+1, levels);
@@ -607,52 +696,89 @@
             var wallLight   = Create3DArray(gridsizeX+1, gridsizeZ+1, levels);
             var floormat    = Create3DArray(gridsizeX+1, gridsizeZ+1, levels);
             
+            var floorAggregate = Create3DArray(gridsizeX+1, gridsizeZ+1, levels);
+            
             var nchar          = 5;
-            var character      = Create1DArray(nchar);
+            var startMovement  = false;
+            var energy = 100;
+            
+            var character          = Create1DArray(nchar);
+            var characterBody      = Create1DArray(nchar);
+            var characterShape     = Create1DArray(nchar);
+            var characterAggregate = Create1DArray(nchar);
+            
             var characterSound = Create1DArray(nchar);
             var charPosX       = Create1DArray(nchar);
             var charPosY       = Create1DArray(nchar);
             var charPosZ       = Create1DArray(nchar);
             var charRot        = Create1DArray(nchar);
             var charMoving     = Create1DArray(nchar);
-            var brainMaterial  = Create1DArray(nchar);
+            var charStatus     = Create1DArray(nchar);
+            var charPhysics    = Create1DArray(nchar);
+            var charHits       = Create1DArray(nchar);
+            var chmove         = Create1DArray(nchar);
+            var chrotate       = Create1DArray(nchar);
             
-            var firedBullet    = Create1DArray(20);
-            var fbAggregate    = Create1DArray(20);
+            var brainMaterial     = Create1DArray(nchar);
+            var characterMaterial = Create1DArray(nchar);
+            
+            var charMass = 1;
+            var charFriction = .5;
+            var charRestitution = .1;
+            
+            var rampFriction = -0.1;
+            var rampRestitution = -0.1;
+            
+            var bulletMass = 0.01;
+            var bulletFriction = 10;
+            var bulletRestitution = 0;
+            
+            var maxbullets      = 10;
+            var firedBullet    = Create1DArray(maxbullets);
+            var fbBody         = Create1DArray(maxbullets);
+            var fbShape        = Create1DArray(maxbullets);
+            var fbAggregate    = Create1DArray(maxbullets);
             var bulletCount    = 0;
             
-            var floorAggregate     = Create3DArray(gridsizeX+1, gridsizeZ+1, levels);
-            var subwallAggregate   = Create3DArray(gridsizeX+1, gridsizeZ+1, levels);
-            var wall0Aggregate     = Create3DArray(gridsizeX+1, gridsizeZ+1, levels);
-            var wall1Aggregate     = Create3DArray(gridsizeX+1, gridsizeZ+1, levels);
-            var wall2Aggregate     = Create3DArray(gridsizeX+1, gridsizeZ+1, levels);
-            var wall3Aggregate     = Create3DArray(gridsizeX+1, gridsizeZ+1, levels);
-            
-            var characterAggregate = Create1DArray(nchar); 
-            
-            var observable         = Create1DArray(nchar);  
-            var observer           = Create1DArray(nchar);  
-            
-            var charCurrent   = 0;
-            var startMovement = false;
-          
             var showWallLight = null;
             
+            console.log("Set Character Locations");
             var ic = 0;
             while (ic<nchar){
                 var sflag=0;
+                var tries =0;
                 while (sflag==0){
-                    charPosX[ic]   = getRndInt(gridsizeX);
-                    charPosY[ic]   = getRndInt(3);
-                    charPosZ[ic]   = getRndInt(gridsizeZ);
-                    var celltype = window["wallmap"+charPosY[ic]][charPosZ[ic]][charPosX[ic]];
-                    if(celltype=="15" || celltype=="16" || celltype=="18"){
-                        sflag=1;
+                    var tempX = getRndInt(gridsizeX);
+                    var tempY = getRndInt(3);
+                    //var tempY = 0;
+                    var tempZ = getRndInt(gridsizeZ);
+                    // check if already occupied;
+                    var check = true;
+                    var ncheck = 0;
+                    while (ncheck<ic){
+                       if (tempX===charPosX[ncheck] && tempY===charPosY[ncheck] && tempZ===charPosZ[ncheck]){
+                           check = false;
+                           break;
+                       } 
+                       ncheck++;
+                    }
+                    
+                    if (check===true){
+                        charPosX[ic]   = tempX;
+                        charPosY[ic]   = tempY;
+                        charPosZ[ic]   = tempZ;                    
+
+                        var celltype = window["wallmap"+charPosY[ic]][charPosZ[ic]][charPosX[ic]];
+                        if(celltype==="15" || celltype==="16" || celltype==="18" || tries>10){
+                            sflag=1;
+                        } else {tries++;}
                     }
                 }
-
-                charMoving[ic] = false;
-                //console.log("Set Character Pos:"+ic+" X:"+charPosX[ic]+" Y:"+charPosY[ic]+" Z:"+charPosZ[ic]);
+                //console.log("Set Position "+ic+" X:"+charPosX[ic]+" Z:"+charPosZ[ic]+" Y:"+charPosY[ic]);
+                charMoving[ic]  = false;
+                charStatus[ic]  = "alive";
+                charPhysics[ic] = "false";
+                charHits[ic]    = 20;
                 ic++;
             }
             
@@ -667,24 +793,34 @@
             var editalpha = 0.5;  
             var alphaStatus;
             var editing = false;
-            
+            console.log("End of Javascript Variables & Start of BabylonJS");  
             const canvas = document.getElementById("renderCanvas"); // Get the canvas element
             const engine = new BABYLON.Engine(canvas, true); // Generate the BABYLON 3D engine
-            const createScene = async function () {
-                
-                $(".start").on("click",function(){
-                    createCharacters();
-                    $(".start").fadeOut();
+            
+    $(".title").on("click",function(){    
+        $(".title").fadeOut(1000);    
+        function start(){
+            const createScene = async function () {                                 
+                    
+                $(".start").on("click",function(){ 
+                                       
+                    createCharacters();                    
+                    $(".start").fadeOut(1000);                   
                     bindkeys();  
-                    const music = new BABYLON.Sound("dreaming", "music/Dreaming.mp3", scene, null, {
-                            loop: true,
-                            autoplay: true,
-                            volume:0.1
-                    });
-                });
+                    
+//                    const music = new BABYLON.Sound("dreaming", "music/Dreaming.mp3", scene, null, {
+//                            loop: true,
+//                            autoplay: true,
+//                            volume:0.1
+//                    });
+
+                });               
                                                         
                 function bindkeys (){
-                    //console.log("Bind Keys");
+                    var shoot = new BABYLON.Sound("shoot","sounds/blockhit.wav",scene,null, {
+                        loop:false,
+                        autoplay: false
+                    });
  
                     document.onkeydown = function(event) {
                         var key_code   = event.keyCode;  
@@ -696,8 +832,6 @@
                             camera.setTarget(startview);
                             cell[cellPosX][cellPosZ][cellPosY].isVisible = true;
                             startMovement = false;
-                            //setMaterials(editalpha);             
-                            //clearInterval(alphaStatus);
                         }
                         else if (key_code==70){ // End Editing
                             setMaterials(1);
@@ -705,25 +839,29 @@
                             editing = false;
                             startMovement = true;
                         }
-                        else if (key_code==32){
+                        else if (key_code==32){ 
+                            shoot.play();
                             firedBullet[bulletCount] = bullet.createInstance("firedBullet_"+bulletCount);
-                            firedBullet[bulletCount].computeWorldMatrix(true);
                             firedBullet[bulletCount].position.x = camera.position.x;
-                            firedBullet[bulletCount].position.y = camera.position.y;
                             firedBullet[bulletCount].position.z = camera.position.z;
-                            firedBullet[bulletCount].checkCollisions = true;
-                            fbAggregate[bulletCount] = new BABYLON.PhysicsAggregate(firedBullet[bulletCount], BABYLON.PhysicsShapeType.SPHERE, { mass: 0.01, restitution: 0.1 }, scene);
-                            fbAggregate[bulletCount].body.applyImpulse(camera.getDirection(BABYLON.Vector3.Forward()),firedBullet[bulletCount].absolutePosition); 
-                            bulletCount++;
-                            if (bulletCount>20){bulletCount=0;}
+                            firedBullet[bulletCount].position.y = camera.position.y;
+                            firedBullet[bulletCount].checkCollisions = true;                    
+                            firedBullet[bulletCount].isVisible = true;
                             
+                            fbAggregate[bulletCount] = new BABYLON.PhysicsAggregate(firedBullet[bulletCount], BABYLON.PhysicsShapeType.BOX, { mass:bulletMass, friction:bulletFriction, restitution:bulletRestitution}, scene);
+                            fbAggregate[bulletCount].body.setCollisionCallbackEnabled(true);
+                            fbAggregate[bulletCount].body.applyImpulse(camera.getDirection(BABYLON.Vector3.Forward()),firedBullet[bulletCount].absolutePosition); 
+                            
+                            killBullet(bulletCount);                         
+                            bulletCount++;
+                            if (bulletCount>=maxbullets){bulletCount=0;}                           
                         }
                     };
 
                     document.onkeyup = function(event) {
                         var key_code   = event.keyCode; 
                         var key_press  = String.fromCharCode(event.keyCode);
-                        console.log(key_press + " " + key_code);
+                        //console.log(key_press + " " + key_code);
                         // Delete Key
                         if (key_code=="8" && editing==true){
                             unbindkeys();
@@ -857,10 +995,6 @@
                             saveBuilding(building);
                         }
                         
-//                        alphaStatus = setInterval(function(){
-//                            setMaterials(1);
-//                            cell[cellPosX][cellPosZ][cellPosY].isVisible = false;
-//                        },5000);
                     };
                 };
         
@@ -874,7 +1008,8 @@
                     wallMaterial.alpha     = thisAlpha;
                     ceilingMaterial.alpha  = thisAlpha;
                     windowMaterial.alpha   = thisAlpha;
-                    doorMaterial.alpha     = thisAlpha;
+                    doorMaterialL.alpha     = thisAlpha;
+                    doorMaterialR.alpha     = thisAlpha;
                     postMaterial.alpha     = thisAlpha;
                     lboxMaterial.alpha     = thisAlpha;
                     barrierMaterial.alpha  = thisAlpha;
@@ -904,27 +1039,46 @@
                     }
                 }    
                 
+                function killBullet(bulletNumber){
+                    setTimeout(function(){
+                        firedBullet[bulletNumber].dispose();
+                    },500);
+                    
+                }               
+                
                 function createCharacters(){
                     var ic = 0;
                     var cx,cy,cz;
+                    var armoffset = xs/12;
 
                     while (ic<nchar){
                         cx = Xpos(charPosX[ic]);
-                        cy = Ypos(charPosY[ic]);
+                        cy = Ypos(charPosY[ic])+(ys/4)+floordepth;
                         cz = Zpos(charPosZ[ic]);
-                        //character[ic] = drone.createInstance("character_"+ic);
                         
-                        character[ic] = BABYLON.MeshBuilder.CreateBox("character_"+ic,{width:xs/10, height:ys/10, depth:zs/10,faceUV:faceUVrobot});
-                        character[ic].computeWorldMatrix(true);
-                        character[ic].position = new BABYLON.Vector3(cx,cy+iheight,cz);
-                        character[ic].rotation.y = Math.PI*Math.random(3);
-                        character[ic].material = characterBodyMaterial;
+                        characterMaterial[ic] = new BABYLON.StandardMaterial("characterMaterial_"+ic);
+                        characterMaterial[ic].emissiveColor = new BABYLON.Color3(1, 0, 0);
+                        characterMaterial[ic].alpha = 0;
+                        
+                        character[ic] = BABYLON.MeshBuilder.CreateCylinder("character_"+ic,{diameter:xs/3, height:ys/2});
+                        character[ic].material = characterMaterial[ic];
+                        character[ic].position = new BABYLON.Vector3(cx,cy,cz);
+                        character[ic].rotation.y = (Math.PI*2) / Math.random(4);                   
                         character[ic].checkCollisions = true;
-                        character[ic].receiveShadows = true;
-                        shadowGenerator.getShadowMap().renderList.push(character[ic]); 
-                        
-                        characterAggregate[ic] = new BABYLON.PhysicsAggregate(character[ic], BABYLON.PhysicsShapeType.BOX, { mass: 0 }, scene);
+                        character[ic].isVisible = true;
+
+                        characterAggregate[ic] = new BABYLON.PhysicsAggregate(character[ic], BABYLON.PhysicsShapeType.BOX, { mass: charMass, friction: charFriction, restitution: charRestitution }, scene);
                         characterAggregate[ic].body.setCollisionCallbackEnabled(true);
+                        charPhysics[ic]=true;
+                        charMoving[ic]=false;
+                        charHits[ic]=20;
+                        
+                        var body = BABYLON.MeshBuilder.CreateBox("bCharacter_"+ic,{width:xs/8, height:ys/8, depth:zs/8,faceUV:faceUVrobot}); 
+                        body.parent = character[ic];
+                        body.position.y = ys/9;
+                        body.material = characterBodyMaterial;
+                        body.receiveShadows = true;
+                        shadowGenerator.getShadowMap().renderList.push(body);
                         
                         characterSound[ic] = new BABYLON.Sound("robot2", "sounds/robot2.mp3", scene, null, {
                             loop: false,
@@ -933,53 +1087,55 @@
                             distanceModel: "exponential",
                             rolloffFactor: 1
                         });
-
                         // Sound will now follow the box mesh position
                         characterSound[ic].attachToMesh(character[ic]);
                         
                         var head = BABYLON.MeshBuilder.CreateSphere("scharacter_"+ic,{diameter:xs/10});
-                        head.parent = character[ic];
+                        head.parent = body;
                         head.position.y = ys/18;
                         head.material = characterHeadMaterial;  
+                        head.isVisible = false;
                         
                         brainMaterial[ic] = new BABYLON.StandardMaterial("brainMaterial_"+ic);
-                        brainMaterial[ic].emissiveColor = new BABYLON.Color3(0.3, 0.3, 0.3); 
-                        brainMaterial[ic].alpha = 1;                         
+                        brainMaterial[ic].emissiveColor = new BABYLON.Color3(1, 1, 1);                       
                         
-                        var brain = BABYLON.MeshBuilder.CreateSphere("brain_"+ic,{diameter:xs/15});
-                        brain.parent = character[ic];
-                        brain.position.y = ys/18;
+                        var brain = BABYLON.MeshBuilder.CreateSphere("brain_"+ic,{diameter:xs/12});
+                        brain.parent = body;
+                        brain.position.y = ys/13;
                         brain.material = brainMaterial[ic];                         
                         
                         var arm1 = BABYLON.MeshBuilder.CreateSphere("a1character_"+ic,{diameter:xs/18});
-                        arm1.parent = character[ic];
-                        arm1.position.x = xs/15;                   
-                        arm1.material = characterMaterial;
+                        arm1.parent = body;
+                        arm1.position.x = armoffset;                   
+                        arm1.material = characterArmMaterial;
                         
-                        var gun1 = BABYLON.MeshBuilder.CreateCylinder("g1character_"+ic,{diameter:xs/100,height:xs/12});
-                        gun1.parent = character[ic];
-                        gun1.position.x = xs/15;
+                        var gun1 = BABYLON.MeshBuilder.CreateCylinder("g1character_"+ic,{diameter:xs/50,height:xs/12});
+                        gun1.parent = body;
+                        gun1.position.x = armoffset;
                         gun1.position.z = -zs/20;
                         gun1.rotation.x = Math.PI/2;
                         
                         var arm2 = BABYLON.MeshBuilder.CreateSphere("a2character_"+ic,{diameter:xs/18});
-                        arm2.parent = character[ic];
-                        arm2.position.x = -xs/15; 
-                        arm2.material = characterMaterial;     
+                        arm2.parent = body;
+                        arm2.position.x = -armoffset; 
+                        arm2.material = characterArmMaterial;     
                         
-                        var gun2 = BABYLON.MeshBuilder.CreateCylinder("g2character_"+ic,{diameter:xs/100,height:xs/12});
-                        gun2.parent = character[ic];
-                        gun2.position.x = -xs/15;
-                        gun2.position.z = -zs/20;
-                        gun2.rotation.x = Math.PI/2;                        
+                        var gun2 = BABYLON.MeshBuilder.CreateCylinder("g2character_"+ic,{diameter:xs/100,height:xs/7});
+                        gun2.parent = body;
+                        gun2.position.x = -armoffset;
+                        gun2.position.z = -zs/16;
+                        gun2.rotation.x = Math.PI/2;    
                         
-                        console.log("Character:"+ic+" X:"+charPosX[ic]+" Y:"+charPosY[ic]+" Z:"+charPosZ[ic]);
+                        var electro = BABYLON.MeshBuilder.CreateSphere("e2electro_"+ic,{diameter:xs/28});
+                        electro.parent = gun2;
+                        electro.position.y = -ys/16;
+                        
+                        //console.log("Created Character:"+ic+" X:"+charPosX[ic]+" Y:"+charPosY[ic]+" Z:"+charPosZ[ic]);
                         ic++;
                     }
                     startMovement=true;
                 }
                 
-            
                 const faceUV =[]; // Used for Walls
                 faceUV[0] = new BABYLON.Vector4(0, 0, 0, 0); //rear face x1,y1,x2,y2
                 faceUV[1] = new BABYLON.Vector4(0, 0, 1, 1); //front face
@@ -989,7 +1145,7 @@
                 faceUV[5] = new BABYLON.Vector4(0, 0, 0, 0); //bottom face 
                 
                 var c,r;
-                const faceUVrobot =[]; // Used for Walls
+                const faceUVrobot =[]; // Used for Robot
                 c=2; r=1;
                 faceUVrobot[0] = new BABYLON.Vector4((c * 1) / 3, (r * 1) / 2, ((c + 1) * 1) / 3, ((r + 1) * 1) / 2); //rear face x1,y1,x2,y2
                 c=1; r=0;
@@ -1009,7 +1165,15 @@
                 faceUVinternal[2] = new BABYLON.Vector4(0, 0, 0, 0); //right face
                 faceUVinternal[3] = new BABYLON.Vector4(0, 0, 0, 0); //left face
                 faceUVinternal[4] = new BABYLON.Vector4(0, 0, 0, 0); //top face
-                faceUVinternal[5] = new BABYLON.Vector4(0, 0, 0, 0); //bottom face     
+                faceUVinternal[5] = new BABYLON.Vector4(0, 0, 0, 0); //bottom face    
+                
+                const faceUVinternalDoor =[]; // Used for Doores
+                faceUVinternalDoor[0] = new BABYLON.Vector4(0, 0, 1, 1); //rear face x1,y1,x2,y2
+                faceUVinternalDoor[1] = new BABYLON.Vector4(0, 0, 1, 1); //front face
+                faceUVinternalDoor[2] = new BABYLON.Vector4(0, 0, 0, 0); //right face
+                faceUVinternalDoor[3] = new BABYLON.Vector4(0, 0, 0, 0); //left face
+                faceUVinternalDoor[4] = new BABYLON.Vector4(0, 0, 0, 0); //top face
+                faceUVinternalDoor[5] = new BABYLON.Vector4(0, 0, 0, 0); //bottom face                  
                 
                 const faceUVexternal =[]; // Used for Walls
                 faceUVexternal[0] = new BABYLON.Vector4(0, 0, 0, 0); //rear face x1,y1,x2,y2
@@ -1089,21 +1253,29 @@
                         var dooroffset = -wallheight/8.5;
                        
                         hinge1[x][z][y] = new BABYLON.MeshBuilder.CreateBox("hinge1_"+x+"_"+z+"_"+y, {width:wallwidth/50, depth:walldepth/50, height:doorheight/10, faceUV:faceUVinternal, wrap:true});
-                        hinge1[x][z][y].parent = cell[x][z][y];                      
+                        hinge1[x][z][y].parent = cell[x][z][y]; 
+                        //hinge1[x][z][y].rotation.y = rotation[rotation];
                         hinge1[x][z][y].position.z = (offsetz[rotation]*(zs/2))-(offsetx[rotation]*(zs/2));
                         hinge1[x][z][y].position.x = (offsetx[rotation]*(zs/2))-(offsetz[rotation]*(zs/2));
                         hinge1[x][z][y].material   = hingeMaterial;
                         hinge1[x][z][y].isVisible  = false;
                         
-                        door1[x][z][y] = new BABYLON.MeshBuilder.CreateBox("door1_"+x+"_"+z+"_"+y, {width:wallwidth/2, depth:walldepth/4, height:doorheight, faceUV:faceUVinternal, wrap:true});
+                        door1[x][z][y] = new BABYLON.MeshBuilder.CreateBox("door1_"+x+"_"+z+"_"+y, {width:wallwidth/2, depth:walldepth/4, height:doorheight, faceUV:faceUVinternalDoor, wrap:true});
                         door1[x][z][y].parent     = hinge1[x][z][y];   
                         door1[x][z][y].rotation.y = rotate[rotation];
                         door1[x][z][y].position.z = offsetx[rotation]*wallwidth/4;
                         door1[x][z][y].position.x = offsetz[rotation]*wallwidth/4;                      
                         door1[x][z][y].position.y = dooroffset;                       
-                        door1[x][z][y].material = doorMaterial;
+                        door1[x][z][y].material = doorMaterialL;
                         door1[x][z][y].receiveShadows = true;
                         door1[x][z][y].checkCollisions = true;
+                        
+                        var doorknob1 = new BABYLON.MeshBuilder.CreateCylinder("knob1_"+x+"_"+z+"_"+y,{diameter:doorheight/23,height:doorheight/3});
+                        doorknob1.parent = hinge1[x][z][y];
+                        doorknob1.material = postMaterial;
+                        doorknob1.rotation.y = rotate[rotation];
+                        doorknob1.position.z = offsetx[rotation]*wallwidth/2.2;
+                        doorknob1.position.x = offsetz[rotation]*wallwidth/2.2;
                         //shadowGenerator.getShadowMap().renderList.push(door1[x][z][y]); 
                         //door1[x][z][y].isVisible=false;
                         
@@ -1114,15 +1286,23 @@
                         hinge2[x][z][y].material   = hingeMaterial;
                         hinge2[x][z][y].isVisible  = false;
                         
-                        door2[x][z][y] = new BABYLON.MeshBuilder.CreateBox("door2_"+x+"_"+z+"_"+y, {width:wallwidth/2, depth:walldepth/4, height:doorheight, faceUV:faceUVinternal, wrap:true});
+                        door2[x][z][y] = new BABYLON.MeshBuilder.CreateBox("door2_"+x+"_"+z+"_"+y, {width:wallwidth/2, depth:walldepth/4, height:doorheight, faceUV:faceUVinternalDoor, wrap:true});
                         door2[x][z][y].parent     = hinge2[x][z][y];  
                         door2[x][z][y].rotation.y = rotate[rotation];
-                        door2[x][z][y].position.z = -(offsetx[rotation]*wallwidth/4);
-                        door2[x][z][y].position.x = -(offsetz[rotation]*wallwidth/4);                       
+                        door2[x][z][y].position.z = -offsetx[rotation]*wallwidth/4;
+                        door2[x][z][y].position.x = -offsetz[rotation]*wallwidth/4;                       
                         door2[x][z][y].position.y = dooroffset;                      
-                        door2[x][z][y].material = doorMaterial;  
+                        door2[x][z][y].material = doorMaterialR;  
                         door2[x][z][y].receiveShadows = true;
                         door2[x][z][y].checkCollisions = true;
+                        
+                        var doorknob2 = new BABYLON.MeshBuilder.CreateCylinder("knob1_"+x+"_"+z+"_"+y,{diameter:doorheight/23,height:doorheight/3});
+                        doorknob2.parent = hinge2[x][z][y];
+                        doorknob2.material = postMaterial;
+                        doorknob2.rotation.y = rotate[rotation];
+                        doorknob2.position.z = -offsetx[rotation]*wallwidth/2.2;
+                        doorknob2.position.x = -offsetz[rotation]*wallwidth/2.2;
+
                         //shadowGenerator.getShadowMap().renderList.push(door2[x][z][y]);         
                         //door2[x][z][y].isVisible=false;
                         
@@ -1168,8 +1348,9 @@
                         subwall[x][z][y].receiveShadows = true;
                         shadowGenerator.getShadowMap().renderList.push(subwall[x][z][y]);  
                         subwall[x][z][y].checkCollisions = true;
-                        subwallAggregate[x][z][y] = new BABYLON.PhysicsAggregate(subwall[x][z][y], BABYLON.PhysicsShapeType.BOX, { mass: 0 }, scene);
-                        subwallAggregate[x][z][y].body.setCollisionCallbackEnabled(true);
+                        new BABYLON.PhysicsAggregate(subwall[x][z][y], BABYLON.PhysicsShapeType.BOX, { mass: 0 }, scene);
+                        //subwallAggregate[x][z][y] = new BABYLON.PhysicsAggregate(subwall[x][z][y], BABYLON.PhysicsShapeType.BOX, { mass: 0 }, scene);
+                        //subwallAggregate[x][z][y].body.setCollisionCallbackEnabled(true);
                    }                   
                     
                     if (counter==0){
@@ -1183,8 +1364,7 @@
                         wall0[x][z][y].receiveShadows = true;
                         shadowGenerator.getShadowMap().renderList.push(wall0[x][z][y]); 
                         wall0[x][z][y].checkCollisions = true;
-                        wall0Aggregate[x][z][y] = new BABYLON.PhysicsAggregate(wall0[x][z][y], BABYLON.PhysicsShapeType.BOX, { mass: 0 }, scene);
-                        wall0Aggregate[x][z][y].body.setCollisionCallbackEnabled(true);                       
+                        new BABYLON.PhysicsAggregate(wall0[x][z][y], BABYLON.PhysicsShapeType.BOX, { mass: 0 }, scene);                     
                                                
                         skirt0[x][z][y] = new BABYLON.MeshBuilder.CreateBox("skirt0"+x+"_"+z+"_"+y,{width:wallwidth, depth:walldepth/8, height:wallheight/20});
                         skirt0[x][z][y].parent = wall0[x][z][y];
@@ -1226,8 +1406,7 @@
                         wall1[x][z][y].receiveShadows = true;
                         shadowGenerator.getShadowMap().renderList.push(wall1[x][z][y]); 
                         wall1[x][z][y].checkCollisions = true;
-                        wall1Aggregate[x][z][y] = new BABYLON.PhysicsAggregate(wall1[x][z][y], BABYLON.PhysicsShapeType.BOX, { mass: 0 }, scene);
-                        wall1Aggregate[x][z][y].body.setCollisionCallbackEnabled(true);                       
+                        new BABYLON.PhysicsAggregate(wall1[x][z][y], BABYLON.PhysicsShapeType.BOX, { mass: 0 }, scene);                     
                         
                         skirt1[x][z][y] = new BABYLON.MeshBuilder.CreateBox("skirt0_"+x+"_"+z+"_"+y,{width:wallwidth, depth:walldepth/8, height:wallheight/20});
                         skirt1[x][z][y].parent = wall1[x][z][y];
@@ -1250,8 +1429,7 @@
                         wall2[x][z][y].receiveShadows = true;
                         shadowGenerator.getShadowMap().renderList.push(wall2[x][z][y]);   
                         wall2[x][z][y].checkCollisions = true;
-                        wall2Aggregate[x][z][y] = new BABYLON.PhysicsAggregate(wall2[x][z][y], BABYLON.PhysicsShapeType.BOX, { mass: 0 }, scene);
-                        wall2Aggregate[x][z][y].body.setCollisionCallbackEnabled(true);                        
+                        new BABYLON.PhysicsAggregate(wall2[x][z][y], BABYLON.PhysicsShapeType.BOX, { mass: 0 }, scene);                      
                         
                         skirt2[x][z][y] = new BABYLON.MeshBuilder.CreateBox("skirt0"+x+"_"+z+"_"+y,{width:wallwidth, depth:walldepth/8, height:wallheight/20});
                         skirt2[x][z][y].parent = wall2[x][z][y];
@@ -1272,8 +1450,7 @@
                         wall3[x][z][y].receiveShadows = true;
                         shadowGenerator.getShadowMap().renderList.push(wall3[x][z][y]);   
                         wall3[x][z][y].checkCollisions = true;
-                        wall3Aggregate[x][z][y] = new BABYLON.PhysicsAggregate(wall3[x][z][y], BABYLON.PhysicsShapeType.BOX, { mass: 0 }, scene);
-                        wall3Aggregate[x][z][y].body.setCollisionCallbackEnabled(true);                        
+                        new BABYLON.PhysicsAggregate(wall3[x][z][y], BABYLON.PhysicsShapeType.BOX, { mass: 0 }, scene);                     
                         
                         skirt3[x][z][y] = new BABYLON.MeshBuilder.CreateBox("skirt0"+x+"_"+z+"_"+y,{width:wallwidth, depth:walldepth/8, height:wallheight/20});
                         skirt3[x][z][y].parent = wall3[x][z][y];
@@ -1294,13 +1471,11 @@
                     floor[x][z][y].receiveShadows = true;
                     floor[x][z][y].checkCollisions = true;
                     floorAggregate[x][z][y] = new BABYLON.PhysicsAggregate(floor[x][z][y], BABYLON.PhysicsShapeType.BOX, { mass: 0 }, scene);
-                    floorAggregate[x][z][y].body.setCollisionCallbackEnabled(true);
                 };
                 
                 const ceilings = function(x,z,y,style){     
                     
-                    if (style=="2"){var thisfaceUV = faceUVceiling1;}else{var thisfaceUV = faceUVceiling;}
-                    
+                    if (style=="2"){var thisfaceUV = faceUVceiling1;}else{var thisfaceUV = faceUVceiling;}                  
                     ceiling[x][z][y] = new BABYLON.MeshBuilder.CreateBox("ceiling_"+x+"_"+z+"_"+y, {width:xs, depth:zs, height:ceilingdepth, faceUV:thisfaceUV, wrap:true});
                     ceiling[x][z][y].parent = cell[x][z][y]; 
                     ceiling[x][z][y].position.y = (wallheight/2)-ceilingdepth;
@@ -1335,70 +1510,101 @@
                 
                 const stairs = function(x,z,y,rotation){
                     
-                    var stairwidth = xs/1.3;
-                    var stairdepth = zs*1.4;
+                    var stairwidth = xs/1.3; // Width of Staircase
+                    var stairdepth = zs*1.5; // Total Depth of Staircase
+                    
+                    var numsteps  = 15;
+                    var stepHeight  = ys/40; // Height of Step 
+                    var stepDepth   = (stairdepth)/numsteps; // Depth of Individual Step
+                    var railWidth   = xs/20;
+                    var railDepth   = ys/20;
+                    var postHeight  = ys/2.5;
+                    var postXoffset = (stairwidth/2)-railWidth;
+                    
+                    
+                    var sX = 0;
+                    var sY = ys/numsteps;          // Individual Step Y Offset
+                    var sZ = stairdepth/numsteps;  // Individual Step X Offset
+                    var Yo = (-ys/2)+(ys/numsteps);//starting Y (height) Offset of stairs
+                    var Zo = (stepDepth/2)-zs;     //starting Z Offset of Stairs
+                    
+                    var hrYoffset = (postHeight)+(stepHeight);// Hand Rail Y Offset
+                    var hrZoffset = (stepDepth/2)-zs/3;   // Hand Rail Z Offset
+                    
+                    var rampYoffset = ys/2;
+                    var rampXoffset = xs/2;
+                    var rampZoffset = -zs/4;
+                    
+                    var railLength = Math.sqrt(Math.pow(ys,2)+Math.pow(stairdepth,2));
+                    var handrailRotation = -Math.atan(ys/(stairdepth));
                     
                     stair[x][z][y] = new BABYLON.MeshBuilder.CreateBox("stair_"+x+"_"+z+"_"+y, {width:stairwidth, depth:zs, height:ceilingdepth, faceUV:faceUVceiling, wrap:true});
                     stair[x][z][y].parent = cell[x][z][y];
                     stair[x][z][y].rotation.y = rotate[rotation];
                     stair[x][z][y].isVisible = false;
+                    stair[x][z][y].isPickable = false;
                     
-                    ramp[x][z][y] = new BABYLON.MeshBuilder.CreateBox("ramp_"+x+"_"+z+"_"+y, {width:stairwidth, depth:stairdepth, height:ceilingdepth, faceUV:faceUVceiling, wrap:true}); 
-                    ramp[x][z][y].parent = cell[x][z][y];
-                    
-                    ramp[x][z][y].rotation.y = rotate[rotation]; 
-                    ramp[x][z][y].rotation.x = -1 * Math.PI/4;
-                    //ramp[x][z][y].rotation.z = rotatex[rotation] * Math.PI/4;
-                    
+                    ramp[x][z][y] = new BABYLON.MeshBuilder.CreateBox("ramp_"+x+"_"+z+"_"+y, {width:stairwidth, depth:railLength, height:ceilingdepth, faceUV:faceUVceiling, wrap:true}); 
+                    ramp[x][z][y].parent = stair[x][z][y];                   
+                    ramp[x][z][y].rotation.x = handrailRotation;                  
                     ramp[x][z][y].material = rampMaterial;
-                    ramp[x][z][y].isVisible = false;
-                    //ramp[x][z][y].receiveShadows = true;
-                    shadowGenerator.getShadowMap().renderList.push(ramp[x][z][y]);
+                    ramp[x][z][y].isVisible = true;
+                    
+                    ramp[x][z][y].position = new BABYLON.Vector3(0,0,rampZoffset);
+
                     ramp[x][z][y].checkCollisions = true;
+                    new BABYLON.PhysicsAggregate(ramp[x][z][y], BABYLON.PhysicsShapeType.BOX, { mass: 0, friction:rampFriction, restitution:rampRestitution }, scene);
                     
                     var steps = [];
                     var posts1 = [];
                     var posts2 = [];
                     
-                    for (let step=0;step<12;step++){
-                        steps[step] = BABYLON.MeshBuilder.CreateBox("step", {width:stairwidth, height:ys/12.15, depth:0.5, faceUV:faceUVstep, wrap:true});
+                    for (let step=0;step<numsteps;step++){
+                        steps[step] = BABYLON.MeshBuilder.CreateBox("step", {width:stairwidth, height:stepHeight, depth:stepDepth, faceUV:faceUVstep, wrap:true});                       
                         steps[step].parent = stair[x][z][y];
                         
-                        let stairXoffset = 0;//((-xs/2.5)+(step/2.5));
-                        let stairYoffset = (-ys/2.3)+(step/2.43);
-                        let stairZoffset = ((-zs/2.5)+(step/2.5));
+                        let stairXoffset = 0;
+                        let stairYoffset = (step*sY)+Yo;
+                        let stairZoffset = (step*sZ)+Zo;
                         
                         steps[step].position = new BABYLON.Vector3(stairXoffset,stairYoffset,stairZoffset);
                         steps[step].material = stepMaterial;
                         steps[step].receiveShadows = true;
-                        //shadowGenerator.getShadowMap().renderList.push(steps[step]);
+                        steps[step].isVisible = true;
+                        steps[step].checkCollisions = false;
+                        steps[step].isPickable = false;
+                        steps[step].isVisible = false;
+                        //new BABYLON.PhysicsAggregate(steps[step], BABYLON.PhysicsShapeType.BOX, { mass: 0, friction:rampFriction, restitution:rampRestitution }, scene);
+                        shadowGenerator.getShadowMap().renderList.push(steps[step]);
                         
-                        posts1[step] = BABYLON.MeshBuilder.CreateCylinder("post",{diameter:xs/60, height:ys/2.5});
+                        posts1[step] = BABYLON.MeshBuilder.CreateCylinder("post",{diameter:xs/60, height:postHeight});
                         posts1[step].parent = stair[x][z][y];
-                        posts1[step].position = new BABYLON.Vector3(stairwidth/2.5,stairYoffset+(ys/5),stairZoffset);
+                        posts1[step].position = new BABYLON.Vector3(postXoffset,stairYoffset+(postHeight/2),stairZoffset);
                         posts1[step].material = postMaterial;
                         
-                        posts2[step] = BABYLON.MeshBuilder.CreateCylinder("post",{diameter:xs/60, height:ys/2.5});
+                        posts2[step] = BABYLON.MeshBuilder.CreateCylinder("post",{diameter:xs/60, height:postHeight});
                         posts2[step].parent = stair[x][z][y];
-                        posts2[step].position = new BABYLON.Vector3(-stairwidth/2.5,stairYoffset+(ys/5),stairZoffset);
-                        posts2[step].material = postMaterial;
-                        
-                    } 
-                    handrail1[x][z][y] = BABYLON.MeshBuilder.CreateBox("handrail1_"+x+"_"+z+"_"+y, {width:stairwidth/19, depth:stairdepth, height:ceilingdepth*3, faceUV:faceUVceiling, wrap:true});
+                        posts2[step].position = new BABYLON.Vector3(-postXoffset,stairYoffset+(postHeight/2),stairZoffset);
+                        posts2[step].material = postMaterial;                     
+                    }                   
+                    
+                    handrail1[x][z][y] = BABYLON.MeshBuilder.CreateBox("handrail1_"+x+"_"+z+"_"+y, {width:railWidth, depth:railLength, height:railDepth, faceUV:faceUVceiling, wrap:true});
                     handrail1[x][z][y].parent = stair[x][z][y];
-                    handrail1[x][z][y].position = new BABYLON.Vector3(stairwidth/2.5,ys/2.4,zs/20);
-                    handrail1[x][z][y].rotation.x = -Math.PI/3.93;
+                    handrail1[x][z][y].position = new BABYLON.Vector3(postXoffset,hrYoffset,hrZoffset);
+                    handrail1[x][z][y].rotation.x = handrailRotation;
                     handrail1[x][z][y].material = floorMaterial;
                     handrail1[x][z][y].receiveShadows = true;
-                    handrail1[x][z][y].checkCollisions = true;
+                    shadowGenerator.getShadowMap().renderList.push(handrail1[x][z][y]);
+                    //handrail1[x][z][y].checkCollisions = true;
                     
-                    handrail2[x][z][y] = BABYLON.MeshBuilder.CreateBox("handrail2_"+x+"_"+z+"_"+y, {width:stairwidth/19, depth:stairdepth, height:ceilingdepth*3, faceUV:faceUVceiling, wrap:true});
+                    handrail2[x][z][y] = BABYLON.MeshBuilder.CreateBox("handrail2_"+x+"_"+z+"_"+y, {width:railWidth, depth:railLength, height:railDepth, faceUV:faceUVceiling, wrap:true});
                     handrail2[x][z][y].parent = stair[x][z][y];
-                    handrail2[x][z][y].position = new BABYLON.Vector3(-stairwidth/2.5,ys/2.4,zs/20);
-                    handrail2[x][z][y].rotation.x = -Math.PI/3.93;  
+                    handrail2[x][z][y].position = new BABYLON.Vector3(-postXoffset,hrYoffset,hrZoffset);
+                    handrail2[x][z][y].rotation.x = handrailRotation;  
                     handrail2[x][z][y].material = floorMaterial;
                     handrail2[x][z][y].receiveShadows = true;
-                    handrail2[x][z][y].checkCollisions = true;
+                    shadowGenerator.getShadowMap().renderList.push(handrail1[x][z][y]);
+                    //handrail2[x][z][y].checkCollisions = true;
                 };
                 
                 const barriers = function (x,z,y){
@@ -1429,10 +1635,9 @@
                                     barrier2[x][z][y].position = new BABYLON.Vector3(0,(-wallheight/3)+floordepth,zs/2);
                                     barrier2[x][z][y].receiveShadows = true;
                                     barrier2[x][z][y].checkCollisions = true;
+                                    new BABYLON.PhysicsAggregate(barrier2[x][z][y], BABYLON.PhysicsShapeType.BOX, { mass: 0 }, scene);
                                     
-                                    var pole = BABYLON.MeshBuilder.CreateCylinder("pole2_"+x+"_"+z+"_"+y+"_B1",{diameter:xs/50,height:wallheight/3});
-                                    pole.parent = barrier2[x][z][y];
-                                    pole.material = poleMaterial;
+                                    poles(barrier2[x][z][y],x,z,y);
                                }                              
 
                             // check right if stairs
@@ -1455,10 +1660,9 @@
                                     barrier1[x][z][y].position = new BABYLON.Vector3(-xs/2,(-wallheight/3)+floordepth,0);
                                     barrier1[x][z][y].receiveShadows = true;
                                     barrier1[x][z][y].checkCollisions = true;
+                                    new BABYLON.PhysicsAggregate(barrier1[x][z][y], BABYLON.PhysicsShapeType.BOX, { mass: 0 }, scene);
                                     
-                                    var pole = BABYLON.MeshBuilder.CreateCylinder("pole1_"+x+"_"+z+"_"+y+"_R1",{diameter:xs/50,height:wallheight/3});
-                                    pole.parent = barrier1[x][z][y];
-                                    pole.material = poleMaterial;
+                                    poles(barrier1[x][z][y],x,z,y);
                                }                              
                              
                             // check left if stairs
@@ -1481,10 +1685,9 @@
                                     barrier3[x][z][y].position = new BABYLON.Vector3(xs/2,(-wallheight/3)+floordepth,0);
                                     barrier3[x][z][y].receiveShadows = true;
                                     barrier3[x][z][y].checkCollisions = true;
+                                    new BABYLON.PhysicsAggregate(barrier3[x][z][y], BABYLON.PhysicsShapeType.BOX, { mass: 0 }, scene);
                                     
-                                    var pole = BABYLON.MeshBuilder.CreateCylinder("pole3_"+x+"_"+z+"_"+y+"_L1",{diameter:xs/50,height:wallheight/3});
-                                    pole.parent = barrier3[x][z][y];
-                                    pole.material = poleMaterial;
+                                    poles(barrier3[x][z][y],x,z,y);
                                 }                              
                                                             
                         }
@@ -1510,10 +1713,9 @@
                                     barrier3[x][z][y].position = new BABYLON.Vector3(-xs/2,(-wallheight/3)+floordepth,0);
                                     barrier3[x][z][y].receiveShadows = true;
                                     barrier3[x][z][y].checkCollisions = true;
+                                    new BABYLON.PhysicsAggregate(barrier3[x][z][y], BABYLON.PhysicsShapeType.BOX, { mass: 0 }, scene);
                                     
-                                    var pole = BABYLON.MeshBuilder.CreateCylinder("pole3_"+x+"_"+z+"_"+y+"_L2",{diameter:xs/50,height:wallheight/3});
-                                    pole.parent = barrier3[x][z][y];
-                                    pole.material = poleMaterial;                                    
+                                    poles(barrier3[x][z][y],x,z,y);                                   
                                }                              
                             
                             // check front
@@ -1534,10 +1736,9 @@
                                     barrier0[x][z][y].position = new BABYLON.Vector3(0,(-wallheight/3)+floordepth,-zs/2);
                                     barrier0[x][z][y].receiveShadows = true;
                                     barrier0[x][z][y].checkCollisions = true;
+                                    new BABYLON.PhysicsAggregate(barrier0[x][z][y], BABYLON.PhysicsShapeType.BOX, { mass: 0 }, scene);
                                     
-                                    var pole = BABYLON.MeshBuilder.CreateCylinder("pole0_"+x+"_"+z+"_"+y+"_L1",{diameter:xs/50,height:wallheight/3});
-                                    pole.parent = barrier0[x][z][y];
-                                    pole.material = poleMaterial;                                    
+                                    poles(barrier0[x][z][y],x,z,y);                                   
                                }                              
                                                        
                             // check back
@@ -1558,10 +1759,9 @@
                                     barrier2[x][z][y].position = new BABYLON.Vector3(0,(-wallheight/3)+floordepth,zs/2);
                                     barrier2[x][z][y].receiveShadows = true;
                                     barrier2[x][z][y].checkCollisions = true;
+                                    new BABYLON.PhysicsAggregate(barrier2[x][z][y], BABYLON.PhysicsShapeType.BOX, { mass: 0 }, scene);
                                     
-                                    var pole = BABYLON.MeshBuilder.CreateCylinder("pole2_"+x+"_"+z+"_"+y+"_B2",{diameter:xs/50,height:wallheight/3});
-                                    pole.parent = barrier2[x][z][y];
-                                    pole.material = poleMaterial;                                    
+                                    poles(barrier2[x][z][y],x,z,y);                                    
                                }                                                                                                               
                         }                         
                         
@@ -1585,10 +1785,9 @@
                                     barrier0[x][z][y].position = new BABYLON.Vector3(0,(-wallheight/3)+floordepth,-zs/2);
                                     barrier0[x][z][y].receiveShadows = true;
                                     barrier0[x][z][y].checkCollisions = true;
+                                    new BABYLON.PhysicsAggregate(barrier0[x][z][y], BABYLON.PhysicsShapeType.BOX, { mass: 0 }, scene);
                                     
-                                    var pole = BABYLON.MeshBuilder.CreateCylinder("pole0_"+x+"_"+z+"_"+y+"_F2",{diameter:xs/50,height:wallheight/3});
-                                    pole.parent = barrier0[x][z][y];
-                                    pole.material = poleMaterial;                                    
+                                    poles(barrier0[x][z][y],x,z,y);                                     
                                }                              
                                                       
                             // check right
@@ -1610,10 +1809,9 @@
                                     barrier1[x][z][y].position = new BABYLON.Vector3(-xs/2,(-wallheight/3)+floordepth,0);
                                     barrier1[x][z][y].receiveShadows = true;
                                     barrier1[x][z][y].checkCollisions = true;
+                                    new BABYLON.PhysicsAggregate(barrier1[x][z][y], BABYLON.PhysicsShapeType.BOX, { mass: 0 }, scene);
                                     
-                                    var pole = BABYLON.MeshBuilder.CreateCylinder("pole1_"+x+"_"+z+"_"+y+"_R2",{diameter:xs/50,height:wallheight/3});
-                                    pole.parent = barrier1[x][z][y];
-                                    pole.material = poleMaterial;                                    
+                                    poles(barrier1[x][z][y],x,z,y);                                    
                                }                              
                                 
                             // check left
@@ -1636,10 +1834,9 @@
                                     barrier3[x][z][y].position = new BABYLON.Vector3(xs/2,(-wallheight/3)+floordepth,0);
                                     barrier3[x][z][y].receiveShadows = true;
                                     barrier3[x][z][y].checkCollisions = true;
+                                    new BABYLON.PhysicsAggregate(barrier3[x][z][y], BABYLON.PhysicsShapeType.BOX, { mass: 0 }, scene);
                                     
-                                    var pole = BABYLON.MeshBuilder.CreateCylinder("pole3_"+x+"_"+z+"_"+y+"_L3",{diameter:xs/50,height:wallheight/3});
-                                    pole.parent = barrier3[x][z][y];
-                                    pole.material = poleMaterial;                                    
+                                    poles(barrier3[x][z][y],x,z,y);                                    
                                 }                                                                                        
                         }       
                         
@@ -1664,10 +1861,9 @@
                                     barrier1[x][z][y].position = new BABYLON.Vector3(xs/2,(-wallheight/3)+floordepth,0);
                                     barrier1[x][z][y].receiveShadows = true;
                                     barrier1[x][z][y].checkCollisions = true;
+                                    new BABYLON.PhysicsAggregate(barrier1[x][z][y], BABYLON.PhysicsShapeType.BOX, { mass: 0 }, scene);
                                     
-                                    var pole = BABYLON.MeshBuilder.CreateCylinder("pole1_"+x+"_"+z+"_"+y+"_R3",{diameter:xs/50,height:wallheight/3});
-                                    pole.parent = barrier1[x][z][y];
-                                    pole.material = poleMaterial;                                    
+                                    poles(barrier1[x][z][y],x,z,y);                                     
                                }                              
                              
                             // check front
@@ -1688,10 +1884,9 @@
                                     barrier0[x][z][y].position = new BABYLON.Vector3(0,(-wallheight/3)+floordepth,-zs/2);
                                     barrier0[x][z][y].receiveShadows = true;
                                     barrier0[x][z][y].checkCollisions = true;
+                                    new BABYLON.PhysicsAggregate(barrier0[x][z][y], BABYLON.PhysicsShapeType.BOX, { mass: 0 }, scene);
                                     
-                                    var pole = BABYLON.MeshBuilder.CreateCylinder("pole0_"+x+"_"+z+"_"+y+"_F3",{diameter:xs/50,height:wallheight/3});
-                                    pole.parent = barrier0[x][z][y];
-                                    pole.material = poleMaterial;                                    
+                                    poles(barrier0[x][z][y],x,z,y);                                   
                                }                              
                                                        
                             // check back
@@ -1711,14 +1906,12 @@
                                     barrier2[x][z][y].position = new BABYLON.Vector3(0,(-wallheight/3)+floordepth,zs/2);
                                     barrier2[x][z][y].receiveShadows = true;
                                     barrier2[x][z][y].checkCollisions = true;
+                                    new BABYLON.PhysicsAggregate(barrier2[x][z][y], BABYLON.PhysicsShapeType.BOX, { mass: 0 }, scene);
                                     
-                                    var pole = BABYLON.MeshBuilder.CreateCylinder("pole2_"+x+"_"+z+"_"+y+"_B3",{diameter:xs/50,height:wallheight/3});
-                                    pole.parent = barrier2[x][z][y];
-                                    pole.material = poleMaterial;                                    
+                                    poles(barrier2[x][z][y],x,z,y);                                    
                                 }                                                           
                         }                                               
                     }
-                    bindkeys();
                 };
                 
                 const walk = function (cam, wx,wz,wy){
@@ -1856,9 +2049,10 @@
                 // Detect Mesh Under Pointer
                 const pointerDown = (mesh, fid)=> {
                     var meshID = mesh.id;
-                    console.log("Clicked on "+meshID);
+                    //console.log("Clicked on "+meshID);
 
-                    if (meshID === "ground" || meshID.substring(0,5)=="floor" || meshID.substring(0,4)=="step" ){
+                    //if (meshID === "ground" || meshID.substring(0,5)=="floor" || meshID.substring(0,4)=="step" ){
+                    if (meshID.substring(0,4)=="ramp" ){
                         if (moving==false){
                             let ray = scene.createPickingRay(scene.pointerX, scene.pointerY, BABYLON.Matrix.Identity(), null);
                             let hit = scene.pickWithRay(ray);
@@ -1867,6 +2061,11 @@
                             pointer.isVisible = true;
                             walk (camera, pickedPoint.x, pickedPoint.z, pickedPoint.y);  
                         }
+                    }
+                    
+                    if ((meshID.substring(0,9)==="character")){
+                        var data = meshID.split("_");
+                        console.log(data[0]+" "+data[1]+" Status:"+charStatus[data[1]]+" move:"+charMoving[data[1]]+" physics:"+charPhysics[data[1]]+" Hits:"+charHits[data[1]]);
                     }
                     
                     if ((meshID.substring(0,4)==="door")){
@@ -1885,104 +2084,33 @@
                         else {var donothing = 0;}
                     }     
                 };
+                               
                 
-                const moveCharacter = (characterNo)=> {
-                    
-                    if (charMoving[characterNo]==false){
-                        
-                        var currentCellContent = window["wallmap"+charPosY[characterNo]][charPosZ[characterNo]][charPosX[characterNo]];
-                        
-                        var directionX = Math.round(Math.random()*2)-1;
-                        var directionZ = Math.round(Math.random()*2)-1;                      
-                        var directionY = Math.round(Math.random()*2)-1;
-                        
-                        if (directionY==1){
-                            if (currentCellContent=="16" || currentCellContent=="00"){var donothing=0;}
-                            else {directionY=0;}
-                        }
-                        if (directionY==-1){
-                            if (currentCellContent=="17" || currentCellContent=="19" || currentCellContent=="00"){var donothing=0;}
-                            else{directionY=0;}                        
-                        }
-                        var moveX=0;
-                        var moveZ=0;
-                        var moveY=0;
-                        
-                        if (directionY!==0 && Number(charPosY[characterNo])+Number(directionY)<levels && Number(charPosY[characterNo])+Number(directionY)>0){
-                            moveY = Number(directionY);
-                            moveX = 0;
-                            moveZ = 0;
-                        }  else {                      
-                            if (Number(charPosX[characterNo])+Number(directionX)<gridsizeX && Number(charPosX[characterNo])+Number(directionX)>0){
-                                moveX = Number(directionX);
-                            }
-
-                            if (Number(charPosZ[characterNo])+Number(directionZ)<gridsizeZ && Number(charPosZ[characterNo])+Number(directionZ)>0){
-                                moveZ = Number(directionZ);
-                            }  
-                        }
-                                               
-                        var cellContent = window["wallmap"+(Number(charPosY[characterNo]) + Number(moveY))][Number(charPosZ[characterNo]) + Number(moveZ)][Number(charPosX[characterNo])+Number(moveX)];
-
-                        if ( (moveY==0 && (cellContent=="15"|| cellContent=="16"|| cellContent=="18" || cellContent=="00")) || (moveY==-1 && (cellContent=="16" || cellContent=="00")) || (moveY==1 && (cellContent=="17" || cellContent=="19"|| cellContent=="00")) ){
-                            charPosX[characterNo]=Number(charPosX[characterNo])+Number(moveX);
-                            charPosY[characterNo]=Number(charPosY[characterNo])+Number(moveY);
-                            charPosZ[characterNo]=Number(charPosZ[characterNo])+Number(moveZ);
-                            var notoccupied = 1;
-                            var oc = 0;
-                            while (oc<nchar){
-                                if (characterNo!==oc){
-                                    if (charPosX[characterNo]==charPosX[oc] && charPosY[characterNo]==charPosY[oc] && charPosZ[characterNo]==charPosZ[oc]){
-                                        notoccupied=0;
-                                    }
-                                }
-                                oc++;
-                            }
-                            if (notoccupied==1){
-                                console.log("Character:"+characterNo+" DX:"+directionX+" DZ:"+directionZ+" DY:"+directionY+" Current Cell Type:"+currentCellContent+" Destination Cell Type:"+cellContent);
-                                var targetEndPos = new BABYLON.Vector3(Xpos(charPosX[characterNo]),Ypos(charPosY[characterNo])+iheight,Zpos(charPosZ[characterNo]));
-                                brainMaterial[characterNo].emissiveColor = new BABYLON.Color3(0, 1, 0);
-                                characterSound[characterNo].play();
-                                // Creating an easing function
-                                const easingFunction = new BABYLON.CubicEase();
-                                easingFunction.setEasingMode(BABYLON.EasingFunction.EASINGMODE_EASEINOUT);
-                                // Create Key Frames
-                                var keyFramesWalk = []; 
-                                keyFramesWalk.push({frame:0, value: character[characterNo].position});
-                                keyFramesWalk.push({frame:totalframes, value: targetEndPos});                                
-                                
-                                //var keyFramesRotate = [];
-                                //keyFramesRotate.push({frame:0, value: new BABYLON.Vector3(0,character[characterNo].rotation,0)});
-                                //keyFramesRotate.push({frame:totalframes, value: new BABYLON.Vector3(0,character[characterNo].rotation+Math.PI,0)});
-                                // Create Key Event
-                                const event = new BABYLON.AnimationEvent(totalframes-10,function () {
-                                    charMoving[characterNo]=false;
-                                    brainMaterial[characterNo].emissiveColor = new BABYLON.Color3(0.3, 0.3, 0.3);
-                                },true,);                               
-                                                             
-                                var cwalk = new BABYLON.Animation("cw_"+characterNo, "position", framerate, BABYLON.Animation.ANIMATIONTYPE_VECTOR3, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);                                                            
-                                cwalk.setKeys(keyFramesWalk);
-                                cwalk.setEasingFunction(easingFunction);
-                                cwalk.addEvent(event);
-                                
-                                //var crotate = new BABYLON.Animation("cr"+characterNo, "rotation", framerate, BABYLON.Animation.ANIMATIONTYPE_VECTOR3, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
-                                //crotate.setKeys(keyFramesRotate);
-                                //crotate.addEvent(event);
-                                scene.beginDirectAnimation(character[characterNo], [cwalk], 0, totalframes, true);                                
-                            }
-                        }
-                    }                   
-                };
+                function poles(mesh,x,z,y){
+                    var pole1 = BABYLON.MeshBuilder.CreateCylinder("pole1_"+x+"_"+z+"_"+y,{diameter:xs/50,height:wallheight/3});
+                    pole1.parent = mesh;
+                    pole1.material = poleMaterial;     
+                    var pole2 = BABYLON.MeshBuilder.CreateCylinder("pole2_"+x+"_"+z+"_"+y,{diameter:xs/50,height:wallheight/3});
+                    pole2.parent = mesh;
+                    pole2.position.x = xs/2;
+                    pole2.material = poleMaterial; 
+                    var pole3 = BABYLON.MeshBuilder.CreateCylinder("pole3_"+x+"_"+z+"_"+y,{diameter:xs/50,height:wallheight/3});
+                    pole3.parent = mesh;
+                    pole2.position.x = -xs/2;
+                    pole3.material = poleMaterial; 
+                }
                                   
                 // Creates a basic Babylon Scene object
                 const scene = new BABYLON.Scene(engine);
+                //scene.useOrderIndependentTransparency = true;
                 // set gravity and collisions
                  // initialize plugin
                 const havokInstance = await HavokPhysics();
                 // pass the engine to the plugin
                 const hk = new BABYLON.HavokPlugin(true, havokInstance);
                 // enable physics in the scene with a gravity
-                scene.enablePhysics(new BABYLON.Vector3(0, -9.8, 0), hk);
+                //scene.enablePhysics();
+                scene.enablePhysics(new BABYLON.Vector3(0, -1, 0), hk);
                 scene.collisionsEnabled = true;
                 
                 //camera
@@ -1990,17 +2118,18 @@
                 var startpos = new BABYLON.Vector3(Xpos(cameraPosX),Ypos(cameraPosY)+iheight,Zpos(cameraPosZ));
                 var startview = new BABYLON.Vector3(Xpos(cellPosX),Ypos(cellPosY)+iheight,Zpos(cellPosZ));
                 
-                var camera = new BABYLON.UniversalCamera("UniCamera", startpos, scene);              
+                var camera = new BABYLON.UniversalCamera("UniCamera", startpos, scene);                             
+                camera.ellipsoid = new BABYLON.Vector3(xs/6, iheight/2, zs/6);  
                 camera.applyGravity = true;
-                camera.ellipsoid = new BABYLON.Vector3(2, iheight/2, 2);               
-                camera.checkCollisions = true;
+                camera.checkCollisions = true;               
+                camera.speed=1;
+                //camera.angularSpeed = .5;
+                camera.angularSensibility=400; //Camera Pan Speed (smaller Faster)
+                camera.minZ = .1;
+                camera.inertia = -1;
+                camera.fovMode = BABYLON.Camera.FOVMODE_HORIZONTAL_FIXED; 
                 
-                camera.attachControl(canvas, true); // allows user input
-                //camera.minZ = 0.0001;
-                camera.speed = 0.5;
-                camera.angularSpeed = 0.5;
-                camera.fovMode = BABYLON.Camera.FOVMODE_HORIZONTAL_FIXED;
-                               
+                camera.attachControl(canvas, true); // allows user input        
                 camera.inputs.addMouseWheel();
                 camera.inputs.attached.mousewheel.wheelPrecisionY = 0.5;
                 camera.inputs.attached.mousewheel.wheelPrecisionX = 0.5;
@@ -2009,10 +2138,6 @@
                 //camera.inputs.removeByType("FreeCameraMouseInput");
                             
                 camera.setTarget(startview);
-                              
-                //const plight = new BABYLON.PointLight("plight", new BABYLON.Vector3(sunX, sunY, sunZ), scene);
-                //const plight = new BABYLON.DirectionalLight("DirectionalLight", new BABYLON.Vector3(0, -1, 0), scene);
-                //plight.intensity = 0;
                 
                 var plight = new BABYLON.DirectionalLight("plight", new BABYLON.Vector3(0, -2, 0), scene);
                 plight.position = new BABYLON.Vector3(sunX, sunY, sunZ);
@@ -2063,7 +2188,7 @@
                 var wallMaterial = new BABYLON.StandardMaterial("wallMaterial", scene);
                 wallMaterial.emissiveColor = new BABYLON.Color3(0.3, 0.3, 0.3); 
                 //wallMaterial.diffuseColor = new BABYLON.Color3(1, 1, 1);
-                wallMaterial.diffuseTexture = new BABYLON.Texture("textures/block1.jpg", scene);
+                wallMaterial.diffuseTexture = new BABYLON.Texture("textures/concrete.jpg", scene);
                 wallMaterial.diffuseTexture.hasAlpha = true;
                 wallMaterial.useAlphaFromDiffuseTexture = true;
                 wallMaterial.alpha = 1;
@@ -2082,6 +2207,7 @@
                 glassCeilingMaterial.diffuseTexture = new BABYLON.Texture("textures/skylight.png", scene);   
                 glassCeilingMaterial.diffuseTexture.hasAlpha = true;
                 glassCeilingMaterial.useAlphaFromDiffuseTexture = true;
+                glassCeilingMaterial.alpha = 1; 
                 
                 var barrierMaterial = new BABYLON.StandardMaterial("barrierMaterial", scene);
                 barrierMaterial.emissiveColor = new BABYLON.Color3(0.2, 0.25, 0.3); 
@@ -2096,36 +2222,44 @@
                 poleMaterial.emissiveColor = new BABYLON.Color3(0.3, 0.3, 0.3);
                 
                 var skirtMaterial = new BABYLON.StandardMaterial("skirtMaterial", scene); 
-                skirtMaterial.emissiveColor = new BABYLON.Color3(0.3, 0.29, 0.24); 
-                skirtMaterial.diffuseColor = new BABYLON.Color3(0.7, 0.7, 0.7);
+                skirtMaterial.emissiveColor = new BABYLON.Color3(0.3, 0.3, 0.3); 
+                skirtMaterial.diffuseColor = new BABYLON.Color3(0.5, 0.5, 0.5);
                 skirtMaterial.specularColor = new BABYLON.Color3(1, 1, 1);
                 
                 var floorMaterial = new BABYLON.StandardMaterial("floorMaterial", scene);
                 floorMaterial.emissiveColor = new BABYLON.Color3(0.3, 0.3, 0.3); 
                 floorMaterial.specularColor = new BABYLON.Color3(1, 1, 0.9);
                 floorMaterial.diffuseTexture = new BABYLON.Texture("textures/floorsmall.jpg", scene);
-                floorMaterial.alpha = 1;
+                //floorMaterial.alpha = 1;
                 
                 var stepMaterial = new BABYLON.StandardMaterial("stepMaterial", scene);
                 stepMaterial.emissiveColor = new BABYLON.Color3(0.3, 0.3, 0.3);                
                 stepMaterial.diffuseTexture = new BABYLON.Texture("textures/stairs.jpg", scene);
-                stepMaterial.alpha = 1;
+                //stepMaterial.alpha = 1;
                 
                 var rampMaterial = new BABYLON.StandardMaterial("rampMaterial", scene);
                 rampMaterial.emissiveColor = new BABYLON.Color3(0.4, 0.4, 0.4);                
-                rampMaterial.alpha = 0.5;    
+                rampMaterial.alpha = 1;    
                 
-                var postMaterial = new BABYLON.StandardMaterial("rampMaterial", scene);
+                var postMaterial = new BABYLON.StandardMaterial("postMaterial", scene);
                 postMaterial.emissiveColor = new BABYLON.Color3(0.3, 0.3, 0.3);              
-                postMaterial.alpha = 1;                  
+                //postMaterial.alpha = 1;                  
                 
-                var doorMaterial = new BABYLON.StandardMaterial("doorMaterial", scene);
-                doorMaterial.emissiveColor = new BABYLON.Color3(0.4, 0.4, 0.4); 
-                doorMaterial.specularColor = new BABYLON.Color3(1, 1, 0.9);
-                doorMaterial.diffuseTexture = new BABYLON.Texture("textures/door.png", scene);   
-                doorMaterial.diffuseTexture.hasAlpha = true;
-                doorMaterial.useAlphaFromDiffuseTexture = true; 
-                doorMaterial.alpha = 1;
+                var doorMaterialL = new BABYLON.StandardMaterial("doorMaterialL", scene);
+                doorMaterialL.emissiveColor = new BABYLON.Color3(0.6, 0.6, 0.6); 
+                doorMaterialL.specularColor = new BABYLON.Color3(1, 1, 0.9);
+                doorMaterialL.diffuseTexture = new BABYLON.Texture("textures/darkwood3.jpg", scene);   
+                //doorMaterialL.diffuseTexture.hasAlpha = true;
+                //doorMaterialL.useAlphaFromDiffuseTexture = true; 
+                //doorMaterialL.alpha = 1;
+                
+                var doorMaterialR = new BABYLON.StandardMaterial("doorMaterialR", scene);
+                doorMaterialR.emissiveColor = new BABYLON.Color3(0.6, 0.6, 0.6); 
+                doorMaterialR.specularColor = new BABYLON.Color3(1, 1, 0.9);
+                doorMaterialR.diffuseTexture = new BABYLON.Texture("textures/darkwood3.jpg", scene);   
+                //doorMaterialR.diffuseTexture.hasAlpha = true;
+                //doorMaterialR.useAlphaFromDiffuseTexture = true; 
+                //doorMaterialR.alpha = 1;       
                 
                 var hingeMaterial = new BABYLON.StandardMaterial("hingeMaterial", scene);
                 hingeMaterial.emissiveColor = new BABYLON.Color3(0.5, 0.5, 0.5); 
@@ -2166,16 +2300,16 @@
                 //downlightMaterial.specularColor = new BABYLON.Color3(1, 1, 1);     
                 downlightMaterial.diffuseTexture.hasAlpha = true;
                 downlightMaterial.useAlphaFromDiffuseTexture = true; 
-                downlightMaterial.alpha = 0.1;
+                //downlightMaterial.alpha = 0.1;
                 
                 var floormatMaterial = new BABYLON.StandardMaterial("floormatMaterial");
                 floormatMaterial.diffuseTexture = new BABYLON.Texture("textures/floormat3.jpg", scene);
                 floormatMaterial.emissiveColor = new BABYLON.Color3(0.3, 0.3, 0.3);
                 floormatMaterial.diffuseColor = new BABYLON.Color3(0.1, 0.1, 0.1);
                 //floormatMaterial.specularColor = new BABYLON.Color3(1, 1, 0.0);
-                
-                var characterMaterial = new BABYLON.StandardMaterial("characterMaterial");
-                characterMaterial.emissiveColor = new BABYLON.Color3(0.1, 0.1, 0.1);
+                             
+                var characterArmMaterial = new BABYLON.StandardMaterial("characterMaterial");
+                characterArmMaterial.emissiveColor = new BABYLON.Color3(0.1, 0.1, 0.1);               
                 
                 var redMaterial = new BABYLON.StandardMaterial("characterMaterial");
                 redMaterial.emissiveColor = new BABYLON.Color3(1, 0, 0);
@@ -2186,20 +2320,31 @@
                 
                 var characterHeadMaterial = new BABYLON.StandardMaterial("characterHeadMaterial");
                 characterHeadMaterial.emissiveColor = new BABYLON.Color3(1, 1, 1); 
-                characterHeadMaterial.alpha = 0.4;
-                
-                var characterBrainMaterial = new BABYLON.StandardMaterial("characterBrainMaterial");
-                characterBrainMaterial.emissiveColor = new BABYLON.Color3(0.2, 0.2, 0.2); 
-                characterBrainMaterial.alpha = 1;  
+                characterHeadMaterial.alpha = 0.4;               
                 
                 var bulletMaterial = new BABYLON.StandardMaterial("bulletMaterial");
                 bulletMaterial.emissiveColor = new BABYLON.Color3(1, 0, 0);
-                bulletMaterial.alpha = 0.5;
                 
-                var bullet = BABYLON.Mesh.CreateSphere("bullet", 16, 0.5, scene);
-                bullet.parent = camera;
-                bullet.material = bulletMaterial
-             
+                var bullet = BABYLON.MeshBuilder.CreateBox("bullet", {width: xs/30, height: ys/30, depth: zs/30});
+                bullet.material = bulletMaterial;
+                bullet.isVisible = false;
+                
+                var malfunction = new BABYLON.Sound("malfunction", "sounds/malfunct.wav", scene, null, {
+                            loop: false,
+                            autoplay: false
+                 });
+                 
+                var hit = new BABYLON.Sound("hit", "sounds/metalhit.wav", scene, null, {
+                            loop: false,
+                            autoplay: false,
+                            volume: 0.05
+                 });  
+                 var collision = new BABYLON.Sound("hit", "sounds/crash.mp3", scene, null, {
+                            loop: false,
+                            autoplay: false,
+                            volume: 0.1
+                 }); 
+                
                 // loop through map
                 var y=0;             
                 var front = 1;
@@ -2217,12 +2362,13 @@
                             cell[x][z][y].material = cellMaterial;
                             cell[x][z][y].isPickable = false;
                             cell[x][z][y].isVisible = false;                           
-                            setCell(x,z,y,wallmap[z][x]);                            
+                            if (wallmap[z][x]!=="00"){
+                                setCell(x,z,y,wallmap[z][x]);
+                            }                           
                         }
                     } 
                 }
-                
-                
+                    
                 // click on screen
                 scene.onPointerObservable.add((pointerInfo) => {      		
                     switch (pointerInfo.type) {
@@ -2236,69 +2382,248 @@
                 
                 var lcounter = 0;
                 var scounter = 0;
+                var suncounter = 0;
                 
                 var alpha = Math.PI;
-                var sdia = 50;
-                var sunoffset = -35;
+                var sdia = 100;
+                var sunoffset = -35;  
                 
-                scene.registerBeforeRender(function(){
-                    
-//                    sunX =+ Math.cos(alpha)*sdia;
-//                    sunY =+ Math.cos(alpha)*20;
-//                    sunZ =+ Math.sin(alpha)*sdia;
-//                                      
-//                    plight.position.x = sunoffset + sunX;
-//                    plight.position.y = 30 + sunY;
-//                    plight.position.z = sunoffset + sunZ;
-//                    
-//                    sun.position.x = sunoffset + sunX;
-//                    sun.position.y =  30 + sunY;
-//                    sun.position.z = sunoffset + sunZ;
-//                    
-//                    plight.setDirectionToTarget(BABYLON.Vector3.Zero());
-//                    alpha += .00001;
-                    
-                    
+                var currentCharacter=0;
+                  
+                scene.registerBeforeRender(function(){                    
+                    suncounter++;
+                    if (suncounter>100){
+                        suncounter = 0;
+                        sunX =+ Math.cos(alpha)*sdia;
+                        sunY =+ Math.cos(alpha)*20;
+                        sunZ =+ Math.sin(alpha)*sdia;
+
+                        plight.position.x = sunoffset + sunX;
+                        plight.position.y = 30 + sunY;
+                        plight.position.z = sunoffset + sunZ;
+
+                        sun.position.x = sunoffset + sunX;
+                        sun.position.y = 30 + sunY;
+                        sun.position.z = sunoffset + sunZ;
+
+                        plight.setDirectionToTarget(BABYLON.Vector3.Zero());
+                        alpha += .0001;
+                        
+                    }
+                                       
                     // move interval counter
                     scounter++;
-                    if (scounter>=(1000/nchar)){
-                        if (startMovement==true){
-                            moveCharacter(charCurrent);
-                            charCurrent++;
-                            if (charCurrent>=nchar){charCurrent=0;} 
+                    if (scounter>=(1000/nchar)){                                              
+                        if (startMovement===true){
+                            moveCharacter(currentCharacter);
+                            currentCharacter++;
+                            if (currentCharacter>=nchar){currentCharacter=0;} 
                         }
                         scounter = 0;                    
-                    }                    
+                    }  
+                    
+                    
+                    camera.onCollide = function (mesh) {
+                                             
+                       var meshID = mesh.name;
+                       var meshSplit = meshID.split("_");
+                       
+                       if (meshSplit[0]!=="floor"){console.log(mesh.name);}
+                       
+                       if (meshSplit[0]==="character"){
+                            var chID = meshSplit[1];
+                            if (charStatus!=="attack"){
+                                charStatus[chID]="attack";
+                                if (charMoving[chID]===true){
+                                    chmove[chID].stop();
+                                    chrotate[chID].stop();  
+                                }                             
+                                charMoving[chID]=false;  
+                                characterAggregate[chID].dispose();
+                                brainMaterial[chID].emissiveColor = new BABYLON.Color3(1, 0, 0);
+                                characterMaterial[chID].alpha=0.1;
+                                var pos = camera.position;
+                                var dv = pos.subtract(character[chID].position);
+                                var yaw = -Math.atan2(dv.z, dv.x) - Math.PI / 2;
+                                var dest = new BABYLON.Quaternion.RotationYawPitchRoll(yaw, 0, 0);
+                                
+                                var ease = new BABYLON.CubicEase();
+                                ease.setEasingMode(BABYLON.EasingFunction.EASINGMODE_EASEINOUT);
+                                var rotQtr = BABYLON.Animation.CreateAndStartAnimation("quickRotate", character[chID], "rotationQuaternion", framerate, totalframes/4, character[chID].rotationQuaternion, dest, 0, ease);
+                                //character[chID].rotationQuaternion = dest;
+                                
+                                setTimeout(function(){
+                                    charStatus[chID]="alive";
+                                    brainMaterial[chID].emissiveColor = new BABYLON.Color3(1, 1, 1);
+                                    characterMaterial[chID].alpha=0;
+                                },5000);
+                            }
+                            
+                            
+                            collision.play();                                                  
+                            energy=energy-0.5;
+                            $(".energybar").css("width",energy+"%");
+                            if (energy<0){gameover();}
+                        }
+                    };
+                    
                 });
                 
                 setTimeout(function(){                  
-                    $(".loading").fadeOut();
+                    $(".loading").fadeOut(1000);
                 },12000);
                 
-                hk.onCollisionObservable.add((ev) => {
-                    var fbmesh = ev.collider.transformNode.name;
-                    var charmesh = ev.collidedAgainst.transformNode.name;
-                    var fbID = fbmesh.split("_");
-                    var chID = charmesh.split("_");
-                    firedBullet[fbID[1]].dispose();
-                    console.log("Moving:"+charMoving[chID[1]]+" firedBullet["+fbID[1]+"] character["+chID[1]+"]");                   
-                    if (charMoving[chID[1]]==false){
-                        charMoving[chID[1]]=true;
-                        brainMaterial[chID[1]].emissiveColor = new BABYLON.Color3(1, 0, 0); 
-                        //characterAggregate[chID[1]].body.setMassProperties({mass: 10});
-                        var ease = new BABYLON.BounceEase(2, 5);
-                        ease.setEasingMode(BABYLON.EasingFunction.EASINGMODE_EASEOUT);
-                        var sink   = BABYLON.Animation.CreateAndStartAnimation('sink_'+chID[1], character[chID[1]], 'position.y', speed1*5, tf, character[chID[1]].position.y, character[chID[1]].position.y-iheight+(ys/10), 0, ease); // Move to Floor     
-                        sink.onAnimationEnd = function () { 
-                            brainMaterial[chID[1]].emissiveColor = new BABYLON.Color3(0, 0, 0);
-                        };
+                function gameover(){                   
+                    $(".gameOverMessage").html("<div>You Are Dead</div><div id='restart' style='font-size:2vw'>Click Here to Continue</div>");
+                    $(".gameOver").fadeIn();
+                    $("#restart").on("click",function(){
+                        energy=100;
+                        $(".energybar").css("width","100%");
+                        $(".gameOverMessage").html("");
+                        $(".gameOver").fadeOut();
+                    });
+                }
+                
+                function enableCharacterPhysics(characterNo){
+                    brainMaterial[characterNo].emissiveColor = new BABYLON.Color3(1, 1, 1);
+                    characterAggregate[characterNo] = new BABYLON.PhysicsAggregate(character[characterNo], BABYLON.PhysicsShapeType.BOX, { mass: charMass, friction: charFriction, restitution: charRestitution }, scene);
+                    characterAggregate[characterNo].body.setCollisionCallbackEnabled(true);                                  
+                    charMoving[characterNo]=false;  
+                    charPhysics[characterNo]=true; 
+                    characterMaterial[characterNo].alpha = 0;
+                    //console.log("Character "+characterNo+" has stopped moving.");
+                }
+                
+                function disableCharacterPhysics(characterNo){
+                    brainMaterial[characterNo].emissiveColor = new BABYLON.Color3(0, 1, 0);
+                    characterAggregate[characterNo].dispose();
+                    charMoving[characterNo]=true;
+                    charPhysics[characterNo]=false;
+                    characterMaterial[characterNo].alpha = 0.05;
+                    //console.log("Character "+characterNo+" has started moving.");        
+                }
+                
+                function setDead(characterNo){
+                    charStatus[characterNo]="dead";
+                    charPhysics[characterNo]=true;
+                    charMoving[characterNo]=false;  
+                    malfunction.play();
+                    brainMaterial[characterNo].emissiveColor = new BABYLON.Color3(1, 0, 0);
+                    characterMaterial[characterNo].alpha = 0;
+                    setTimeout(function(){
+                        brainMaterial[characterNo].emissiveColor = new BABYLON.Color3(0, 0, 0);
+                        brainMaterial[characterNo].diffuseColor = new BABYLON.Color3(0.3, 0.3, 0.3);
+                        brainMaterial[characterNo].specularColor = new BABYLON.Color3(0, 0, 0);
+                    },1000);  
+                }
+                
+                const moveCharacter = (characterNo)=> {
+                                    
+                    if (charMoving[characterNo]===false && charStatus[characterNo]==="alive"){
+                        
+                        var currentCellContent = window["wallmap"+charPosY[characterNo]][charPosZ[characterNo]][charPosX[characterNo]];                      
+                        var directionX = Math.round(Math.random()*2)-1;
+                        var directionZ = Math.round(Math.random()*2)-1;                      
+                        var directionY = 0;
+                    
+                        var moveX=0;
+                        var moveZ=0;
+                        var moveY=0;
+
+                        if (Number(charPosX[characterNo])+Number(directionX)<gridsizeX && Number(charPosX[characterNo])+Number(directionX)>0){
+                            moveX = Number(directionX);
+                        }
+                        if (Number(charPosZ[characterNo])+Number(directionZ)<gridsizeZ && Number(charPosZ[characterNo])+Number(directionZ)>0){
+                            moveZ = Number(directionZ);
+                        }  
+
+                        // Destination Cell 
+                        var tempX = Number(charPosX[characterNo]) + Number(moveX);
+                        var tempY = Number(charPosY[characterNo]) + Number(moveY);
+                        var tempZ = Number(charPosZ[characterNo]) + Number(moveZ);
+                        var tempRot = character[characterNo].rotation.y + (Math.PI*2)/(Math.random(3)+1);
+                        var rotateEnd = new BABYLON.Vector3(0,tempRot,0);
+                        // check if already occupied;
+                        var check = true;
+                        var ncheck = 0;
+                        while (ncheck<nchar){
+                           if (tempX===charPosX[ncheck] && tempY===charPosY[ncheck] && tempZ===charPosZ[check]){
+                               check = false;
+                               break;
+                           } 
+                           ncheck++;
+                        }
+
+                        if (check===true){
+                            var cellContent = window["wallmap"+tempY][tempZ][tempX];
+                            if ( (moveY===0 && (cellContent==="15"|| cellContent==="16"|| cellContent==="18" || (cellContent=="00" && charPosY[characterNo]==0) )) || (moveY===-1 && (cellContent==="16")) || (moveY===1 && (cellContent==="17" || cellContent==="19")) ){
+                                charPosX[characterNo]=tempX;
+                                charPosY[characterNo]=tempY;
+                                charPosZ[characterNo]=tempZ;
+                                
+                                var finalX = Xpos(tempX)+(Math.random(xs/2)-Math.random(xs/2));
+                                var finalZ = Zpos(tempZ)+(Math.random(zs/2)-Math.random(zs/2));
+                                var finalY = Ypos(tempY)+(ys/4)+floordepth
+
+                                var destination = new BABYLON.Vector3(finalX,finalY,finalZ);
+                                brainMaterial[characterNo].emissiveColor = new BABYLON.Color3(0, 1, 0);
+                                characterAggregate[characterNo].dispose();
+                                charMoving[characterNo]=true;
+                                charPhysics[characterNo]=false;
+                                characterSound[characterNo].play();
+                                characterMaterial[characterNo].alpha = 0.05;
+                                //console.log("Character "+characterNo+" has started moving.");
+                                var ease = new BABYLON.CubicEase();
+                                ease.setEasingMode(BABYLON.EasingFunction.EASINGMODE_EASEINOUT);
+                                chmove[characterNo] = BABYLON.Animation.CreateAndStartAnimation("characterMove", character[characterNo], "position", framerate, totalframes, character[characterNo].position, destination, 0,ease);
+                                chrotate[characterNo] = BABYLON.Animation.CreateAndStartAnimation("characterRotate", character[characterNo], "rotation", framerate, totalframes, character[characterNo].rotation, rotateEnd, 0,ease);
+                                chmove[characterNo].onAnimationEnd = function () {
+                                    enableCharacterPhysics(characterNo);
+                                };
+                                //rotate.onAnimationEnd = function () {};                                 
+                            }  
+                        }
                     }
+                };
+                
+                hk.onCollisionObservable.add((ev) => {
+                    
+                    var object1   = ev.collider.transformNode.name;
+                    var object2   = ev.collidedAgainst.transformNode.name;
+                    var object1ID = object1.split("_");
+                    var object2ID = object2.split("_");
+                    
+                    if (object1ID[0]!=="floor" && object2ID[0]!=="floor"){
+                        //console.log(ev.type+" "+object1+" "+object2);
+                        if (ev.type==="COLLISION_STARTED"){
+                            if (object1ID[0]==="character" && object2ID[0]==="firedBullet"){
+                                if (charStatus[object1ID[1]]!=="dead"){
+                                    hit.play();
+                                    charHits[object1ID[1]]--;                              
+                                    //console.log("Character "+object1ID[1]+" Remain:"+charHits[object1ID[1]]);
+                                    if (charHits[object1ID[1]]<0){
+                                        setDead(object1ID[1]);
+                                    }
+                                }                                                                                         
+                            }
+                            else if (object2ID[0]==="character" && object1ID[0]==="firedBullet"){
+                                if (charStatus[object2ID[1]]!=="dead"){
+                                    hit.play();
+                                    charHits[object2ID[1]]--;
+                                    //console.log("Character "+object2ID[1]+" Remain:"+charHits[object2ID[1]]);
+                                    if (charHits[object2ID[1]]<0){
+                                        setDead(object2ID[1]);
+                                    }
+                                }                                                              
+                            }
+                        }
+                    }
+                                     
                 });
                 
                 return scene;
 
             };
-        
         
         createScene().then((scene) => {
             engine.runRenderLoop(function () {
@@ -2307,6 +2632,8 @@
                 }
             });
         });
+        
+    }
         
 //        const scene = createScene(); //Call the createScene function
 //        // Register a render loop to repeatedly render the scene
@@ -2322,7 +2649,8 @@
         
         
         $(function(){
-            
+
+            start();
             refreshLoop();
             
             setInterval(() => {               
@@ -2334,6 +2662,8 @@
             }, 1000);
 
         }); 
+        
+        });
 	</script>
     </body>
 </html>
